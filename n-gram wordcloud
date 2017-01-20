@@ -91,3 +91,19 @@ wordcloud(words = d$word,
           scale = c(3,.8),
           random.order = F,
           colors = pal)
+ 
+ #create tokenizer
+tokenize_ngrams <- function(x, n=3) return(rownames(as.data.frame(unclass(textcnt(x,method="string",n=n)))))
+
+# BigramTokenizer ####
+BigramTokenizer <- function(x) NGramTokenizer(x, Weka_control(min = 2, max = 2))
+
+# Create an n-gram Word Cloud ----------------------------------------------
+tdm.ng <- TermDocumentMatrix(ds5.1g, control = list(tokenize = BigramTokenizer))
+dtm.ng <- DocumentTermMatrix(ds5.1g, control = list(tokenize = BigramTokenizer))
+ 
+# Try removing sparse terms at a few different levels
+tdm89.ng <- removeSparseTerms(tdm.ng, 0.89)
+tdm9.ng  <- removeSparseTerms(tdm.ng, 0.9)
+tdm91.ng <- removeSparseTerms(tdm.ng, 0.91)
+tdm92.ng <- removeSparseTerms(tdm.ng, 0.92)
